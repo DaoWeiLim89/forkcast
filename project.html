@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Forkcast &middot; Project Details</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f5f7fa;
+    --surface-2: #eceff3;
+    --text: #171b21;
+    --muted: #5a6472;
+    --border: #dfe4ea;
+    --accent: #0c2340;
+    --gold: #b8860b;
+    --link: #0f4c81;
+    --shadow: 0 1px 2px rgba(12, 35, 64, .06), 0 8px 24px rgba(12, 35, 64, .05);
+    --radius: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f141b;
+      --surface: #161d26;
+      --surface-2: #1d2531;
+      --text: #e7edf4;
+      --muted: #9aa7b6;
+      --border: #2a3441;
+      --accent: #9dc0e6;
+      --gold: #e0b44a;
+      --link: #7cb3e8;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .3);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    padding: 0 1.25rem 5rem;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+
+  header {
+    padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .eyebrow {
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+    margin: 0 0 .5rem;
+    letter-spacing: -.02em;
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+    max-width: 62ch;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .meta li {
+    font-size: .82rem;
+    padding: .3rem .7rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ---------- Table of contents ---------- */
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  nav.toc h2 {
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .75rem;
+  }
+
+  nav.toc ol {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+  }
+
+  @media (max-width: 560px) { nav.toc ol { grid-template-columns: 1fr; } }
+
+  nav.toc li { margin: .15rem 0; }
+
+  /* ---------- Sections ---------- */
+
+  section { margin-bottom: 3.5rem; scroll-margin-top: 1.5rem; }
+
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    letter-spacing: -.01em;
+    color: var(--accent);
+    margin: 0 0 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--gold);
+    display: inline-block;
+  }
+
+  h3 {
+    font-size: 1.08rem;
+    margin: 2rem 0 .6rem;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: .95rem;
+    margin: 1.25rem 0 .4rem;
+    color: var(--muted);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+
+  p { margin: 0 0 1rem; }
+
+  a { color: var(--link); text-underline-offset: 2px; }
+
+  ul, ol { padding-left: 1.3rem; }
+
+  li { margin: .4rem 0; }
+
+  strong { font-weight: 650; }
+
+  /* ---------- Cards ---------- */
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.6rem;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow);
+  }
+
+  .card h3 {
+    margin-top: 0;
+    font-size: 1.15rem;
+    color: var(--accent);
+  }
+
+  .card .lede {
+    color: var(--muted);
+    font-size: .95rem;
+    margin-bottom: 1rem;
+  }
+
+  .card h4 { margin-top: 1.1rem; }
+
+  .card ul { margin-bottom: 0; }
+
+  /* ---------- Basic function list ---------- */
+
+  dl.functions { margin: 0; }
+
+  dl.functions dt {
+    font-weight: 650;
+    margin-top: 1.1rem;
+    color: var(--text);
+  }
+
+  dl.functions dd {
+    margin: .25rem 0 0;
+    color: var(--muted);
+  }
+
+  /* ---------- ER diagram callout ---------- */
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .95rem;
+    padding: .7rem 1.3rem;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    transition: opacity .15s ease;
+  }
+
+  .btn:hover { opacity: .85; }
+
+  /* ---------- Footer ---------- */
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: .85rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">CSE 30246 &middot; Database Concepts &middot; Project Details</p>
+  <h1>Forkcast</h1>
+  <p class="tagline">
+    A dish-level rating, review, and recommendation platform for Notre Dame dining halls.
+  </p>
+  <ul class="meta">
+    <li>Team: forkcast</li>
+    <li>Course: CSE 30246</li>
+    <li>Stage 2: Project Details</li>
+  </ul>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#description">Description of the Application</a></li>
+    <li><a href="#usefulness">Usefulness</a></li>
+    <li><a href="#realness">Realness</a></li>
+    <li><a href="#functionality">Functionality</a></li>
+    <li><a href="#er-diagram">ER Diagram &amp; Assumptions</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ============================================================ -->
+<section id="description">
+  <h2>1. Description of the Application</h2>
+
+  <p>
+    Forkcast is a dish-level rating, review, and recommendation platform for Notre Dame
+    dining halls. Students currently lack a centralized online platform to share their
+    dining preferences and feedback. Dining halls rely on traditional methods, such as
+    whiteboards, to gather student input. Our system aims to make this feedback more
+    accessible and help students discover meals they enjoy.
+  </p>
+
+  <p>
+    Our system will obtain daily dining hall menus from
+    <a href="https://nd.nutrislice.com/menu/north-dining-hall">dining.nd.edu</a> and allow
+    students to rate individual dishes. We are considering several rating formats, including
+    a five-star scale, like/dislike buttons, or three recommendation levels: "Don't
+    recommend," "Recommend," and "Strongly recommend." We also plan to implement a chat
+    section that allows students to write comments about the food and provide additional,
+    more substantial feedback. Students can also recommend dishes they would like the
+    dining hall to serve in the future, and others can upvote or downvote these suggestions
+    using a Reddit-style voting system, helping the dining staff identify the most popular
+    requests.
+  </p>
+
+  <p>
+    Our project seeks to encourage student participation as well as recommend dishes that a
+    user might enjoy. By taking advantage of the rotating dining hall menu, students can be
+    notified when their favorites return. Furthermore, based on a student's previous
+    ratings, dishes that they may enjoy can be highlighted. This gives students a practical
+    benefit for sharing their preferences and helps them plan where and what to eat.
+  </p>
+
+  <p>
+    Ratings and comments are attached to the dish itself, so a student's opinion builds up
+    over time instead of resetting each day. Separately, every time a student eats a dish
+    they can tap a button recording how that serving compared to usual: better than usual,
+    as usual, or worse than usual. Those taps accumulate into a running history, so the dish
+    page can show whether it has been good lately without losing the student's overall
+    rating. Collecting student ratings gives the dining hall direct feedback on their
+    offerings and helps students discover which dishes their peers enjoy.
+  </p>
+
+  <p>
+    Our system does not stop there. It aims to use more sophisticated recommendation
+    algorithms. In our current design, students participate in an optional survey about
+    their food preferences during sign-up, which builds a preliminary preference profile for
+    users. We then build a correlation matrix between different dishes once we have enough
+    data, and update the user's preference profile based on their ratings and potentially
+    their comments. Based on the volume of data, we can incorporate historical ratings into
+    the algorithm.
+  </p>
+
+  <p>
+    As a separate feature, we are considering a "find a dining partner" tab that allows
+    people to look for dining partners and match people with similar taste preferences, to
+    augment the social aspect of our system.
+  </p>
+
+  <p>
+    Eventually, we wish to expand the app to other campus restaurants and beyond campuses.
+  </p>
+</section>
+
+<!-- ============================================================ -->
+<section id="usefulness">
+  <h2>2. Usefulness</h2>
+
+  <p>
+    Our application has both a personal and a social aspect.
+  </p>
+
+  <p>
+    For the personal aspect, it helps students make more informed decisions about where and
+    what to eat. By combining daily menus, student reviews, and personalized
+    recommendations, our system helps students discover dishes that match their preferences
+    and have better dining experiences, ultimately improving the dining quality at Notre
+    Dame. It also gives students a practical reason to rate: the more a student rates, the
+    better their recommendations get.
+  </p>
+
+  <p>
+    For the social aspect, students can learn about peer preferences, exchange their
+    opinions on dishes, and find dining partners, getting to know more people on campus
+    through perhaps the most ancient and most enjoyable way to know people: eating together.
+    The system will also provide dining hall staff with a centralized source of student
+    feedback. Aggregated ratings and comments could help staff identify popular dishes,
+    recurring concerns, and changes in student preferences.
+  </p>
+
+  <h3>Similar and equivalent applications</h3>
+
+  <p>
+    Several services offer related functionality.
+  </p>
+
+  <ul>
+    <li>
+      <strong>The Notre Dame Dining website</strong> provides access to dining hall menus,
+      but it does not allow students to rate the individual dishes, which is what our system
+      is trying to solve.
+    </li>
+    <li>
+      <strong>Eat UNC</strong>, a similar project at the University of North Carolina,
+      offers dish ratings, saved favorites, and notifications when favorite dishes return.
+      However, our system aims to use more sophisticated notifications and food
+      recommendation algorithms instead of just notifying for starred dishes.
+    </li>
+    <li>
+      There are few dish-based rating food apps on the market. Some small ones include
+      <strong>Plateful</strong>, which lets users rate dishes and offers recommendations
+      based on personal taste profiles. Our system is different in that it helps students
+      choose from today's dining hall offerings, with feedback about today's preparations.
+      Moreover, through the community at Notre Dame, we hope our app can provide a feedback
+      channel for the Notre Dame dining staff, both through the ratings and the dishes
+      students propose.
+    </li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<section id="realness">
+  <h2>3. Realness</h2>
+
+  <p>
+    Our data comes from two places: the Notre Dame dining website, and the students who use
+    the system.
+  </p>
+
+  <h3>Dining options</h3>
+
+  <p>
+    We source our dining data from the Notre Dame dining website at
+    <a href="https://nd.nutrislice.com/menu/north-dining-hall">nd.nutrislice.com</a>. This
+    data can be obtained by scraping the site, and it gives us:
+  </p>
+
+  <ul>
+    <li>Dish name</li>
+    <li>Dining location</li>
+    <li>Meal periods</li>
+    <li>Dates</li>
+  </ul>
+
+  <p>
+    One caveat is that the nutrition information takes the form of a nutrition label, so the
+    data will have to be parsed from it.
+  </p>
+
+  <h3>Student-generated data</h3>
+
+  <ul>
+    <li><strong>Sign-up food preferences</strong></li>
+    <li><strong>Ratings</strong></li>
+    <li><strong>Comments</strong></li>
+    <li><strong>Dish suggestions</strong></li>
+    <li><strong>Upvotes and downvotes</strong></li>
+  </ul>
+
+  <p>
+    The dining options side is real, public, and daily. The student-generated side starts
+    empty by definition. Depending on how much data we need for the project, we may simulate
+    some of it, and we will ask the professor about our data needs before doing so.
+  </p>
+</section>
+
+<!-- ============================================================ -->
+<section id="functionality">
+  <h2>4. Functionality</h2>
+
+  <h3>4.1 Basic Functions</h3>
+
+  <p>
+    Our application will provide the following core functionality.
+  </p>
+
+  <dl class="functions">
+    <dt>Browse dining halls and menus</dt>
+    <dd>
+      Users can select a Notre Dame dining hall and view the dishes being served for a
+      particular date and meal period. Dishes will be organized into categories to make the
+      menu easy to navigate.
+    </dd>
+
+    <dt>Search for dishes</dt>
+    <dd>
+      Users can search for a specific dish and view information about where and when it is
+      being served, along with its ratings and reviews.
+    </dd>
+
+    <dt>Rate dishes</dt>
+    <dd>
+      Users can submit a rating for individual dishes they have eaten. A rating is associated
+      with the user and the dish, so it reflects their overall opinion of that dish rather
+      than a single serving. A user rates a given dish once and can update that rating later.
+    </dd>
+
+    <dt>Record how a serving compared to usual</dt>
+    <dd>
+      Separate from the rating itself, every time a student eats a dish they can tap a
+      button recording whether that serving was better than usual, as usual, or worse than
+      usual. These accumulate into a running history, so the dish page can show how a dish
+      has been lately without disturbing anyone's overall rating of it.
+    </dd>
+
+    <dt>Rate a meal</dt>
+    <dd>
+      Users can also rate a meal period overall, separate from any individual dish, giving a
+      quick read on how lunch or dinner went as a whole.
+    </dd>
+
+    <dt>View ratings and reviews</dt>
+    <dd>
+      Users can see ratings and student feedback for dishes, along with how recent servings
+      have compared to usual. This allows students to make more informed decisions about what
+      to eat.
+    </dd>
+
+    <dt>Submit comments and feedback</dt>
+    <dd>
+      Users can leave comments about individual dishes or a dining hall meal. Users can also
+      submit suggestions for dishes they would like Notre Dame Dining to serve.
+    </dd>
+
+    <dt>Create and manage a user profile</dt>
+    <dd>
+      Users can create an account and provide basic food preferences. They can also view and
+      update their previous ratings and preferences.
+    </dd>
+
+    <dt>View personal rating history</dt>
+    <dd>
+      Users can see the dishes they have previously rated and their ratings over time. This
+      information will also provide the foundation for the personalized recommendation
+      functionality described in the advanced functions.
+    </dd>
+
+    <dt>View dining information by date</dt>
+    <dd>
+      Users can browse the menu for a specific date and meal period to see which dishes are
+      being served, and read the ratings and comments on each one.
+    </dd>
+  </dl>
+
+  <h3>4.2 Advanced Functions</h3>
+
+  <p>
+    We plan to offer two advanced functions. Both go beyond the basic functions listed
+    above, and each is technically challenging enough to require several days of design and
+    implementation work on its own.
+  </p>
+
+  <div class="card">
+    <h3>Advanced Function 1: Dish Recommendation System</h3>
+    <p class="lede">
+      A fully realized dish recommendation system based on a user's individual taste profile,
+      built from their survey results and previous ratings.
+    </p>
+
+    <p>
+      <strong>What it does.</strong> Every user gets a ranked list of dishes they are likely
+      to enjoy, surfaced directly on the menu view and in a separate suggested food tab.
+      This is what closes the loop for the user: the more they rate, the better the
+      suggestions get.
+    </p>
+
+    <h4>How it works</h4>
+    <p>
+      The engine blends three signals into a single score per candidate dish:
+    </p>
+    <ul>
+      <li>
+        <strong>Survey-based content filtering.</strong> The optional sign-up survey and a
+        dish's own attributes (cuisine type, protein, spice level, nutrition profile,
+        dietary tags) produce an initial estimate for dishes the user has never rated. This
+        is what makes recommendations possible before any rating history exists.
+      </li>
+      <li>
+        <strong>Dish-to-dish correlation.</strong> Once we have enough data, we build a
+        correlation matrix between different dishes. If the people who loved dish A also
+        consistently loved dish B, the two correlate, and a user's highest-rated dishes can
+        be used to pull up correlated dishes they have not tried. Correlation is easier to
+        work with than covariance because it is standardized, which should make the matrix
+        more comparable across dishes with very different rating volumes.
+      </li>
+      <li>
+        <strong>Similar-user clustering.</strong> The Spotify-style signal: cluster users by
+        their dish ratings and survey results, then suggest dishes that people in a similar
+        cluster generally love, even if our user has never rated them.
+      </li>
+    </ul>
+
+    <h4>Why it is technically challenging</h4>
+    <ul>
+      <li>
+        <strong>Storing and maintaining the matrix.</strong> We need somewhere to keep the
+        dish-by-dish matrix, and we cannot recompute it from scratch on every request. That
+        means an incremental update strategy that folds in each new rating, which requires
+        reasoning carefully about what happens to a pairwise statistic when a single user's
+        rating changes.
+      </li>
+      <li>
+        <strong>Sparsity and cold start.</strong> With a few hundred users and thousands of
+        dishes, the user-by-dish rating matrix is overwhelmingly empty. Naive correlation on
+        sparse columns produces unstable, meaningless values, so we need minimum
+        co-occurrence thresholds and smoothing.
+      </li>
+      <li>
+        <strong>Score blending and tuning.</strong> Combining survey, dish-to-dish, and
+        similar-user scores into one ranking requires a weighting scheme, and we need a way
+        to evaluate whether the recommendations are actually good.
+      </li>
+      <li>
+        <strong>Query cost.</strong> Producing a ranked list for one user across one day's
+        menu has to run inside a page load, which forces real decisions about indexing,
+        precomputation, and caching.
+      </li>
+    </ul>
+
+    <h4>Why it is worth having</h4>
+    <p>
+      Recommendations are what make rating worth the effort. Without them, a student rates a
+      dish and gets nothing back; with them, every rating measurably improves what the app
+      shows them tomorrow. It is also the feature that most directly serves dining staff and
+      students at once, since it converts scattered individual opinions into a clear signal
+      about what is worth eating today.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Advanced Function 2: Comment Sections for Meals and Individual Dishes</h3>
+    <p class="lede">
+      Comment sections for the overall meal review and for individual dish reviews, with
+      threaded replies, Giphy integration, and media upload.
+    </p>
+
+    <p>
+      <strong>What it does.</strong> Every dish and every meal period has a comment section.
+      Students can reply to each other in nested threads, and comments can carry an uploaded
+      photo of what they were actually served or a GIF from Giphy, which makes it easy for
+      students to creatively express their opinions.
+    </p>
+
+    <h4>How it works</h4>
+    <ul>
+      <li>
+        <strong>Threaded data model.</strong> Comments are stored with a self-referencing
+        parent reference, and are attachable to either a dish or a meal period. Threads need
+        to be fetched, nested, and paginated without loading an entire discussion tree on
+        every page view.
+      </li>
+      <li>
+        <strong>Media upload pipeline.</strong> Users upload images which we validate
+        (type, size), resize and thumbnail on the server, store on the filesystem, and
+        reference by URL from the database, keeping binaries out of the database rows.
+      </li>
+      <li>
+        <strong>Third-party integration.</strong> Giphy is integrated through its API, which
+        means handling API keys, rate limits, and the failure case where the upstream service
+        is unavailable or slow.
+      </li>
+    </ul>
+
+    <h4>Why it is technically challenging</h4>
+    <p>
+      Each of the three pieces above is a distinct engineering problem: recursive queries,
+      binary file handling, and external API integration. A comment system that merely
+      appends rows is a day's work; one that handles threaded rendering efficiently and
+      media at scale, with a third-party dependency, is several.
+    </p>
+
+    <h4>Why it is worth having</h4>
+    <p>
+      Star ratings compress an opinion into a number and throw away everything interesting.
+      Comments carry the specifics a student actually needs: that the pasta was cold, that
+      the line was twenty minutes, that the vegan option was surprisingly good. That
+      specificity is exactly what makes the feedback useful to dining staff. Media makes
+      participation low-effort and genuinely fun: a photo of a plate says more than a
+      paragraph, and it lowers the barrier enough that people actually contribute.
+    </p>
+  </div>
+
+  <h3>4.3 Future Extensions</h3>
+  <p>
+    Beyond the required scope, we are considering a <strong>"find a dining partner"</strong>
+    feature that matches users with similar taste profiles, a dish-return notification system
+    built on top of favorites, and eventually expanding Forkcast beyond the dining halls to
+    other campus restaurants and beyond campuses.
+  </p>
+</section>
+
+<!-- ============================================================ -->
+<section id="er-diagram">
+  <h2>5. ER Diagram &amp; Assumptions</h2>
+
+  <p>
+    Our entity-relationship diagram covers the menu side (dining halls, menus, and the dishes
+    on them) and the interaction side (students, their sign-up surveys, ratings, serving
+    feedback, comments, and dish suggestions).
+  </p>
+
+  <p>
+    <a class="btn" href="erdiagram.svg">View the ER diagram &rarr;</a>
+  </p>
+
+  <!-- Once erdiagram.svg is in this folder, you can embed the diagram inline instead
+       of linking to it by replacing the anchor above with:
+
+       <img src="erdiagram.svg" alt="Entity-relationship diagram for Forkcast"
+            style="max-width:100%; height:auto;" />
+  -->
+
+  <h3>Assumptions</h3>
+
+  <ol>
+    <li>
+      <strong>Dish vs. menu appearance.</strong> A <em>Dish</em> is a canonical, persistent
+      food item ("Chicken Tikka Masala"). A menu appearance is one serving of that dish at one
+      dining hall, on one date, during one meal period, which we model as the relationship
+      between a menu and a dish. Ratings and comments attach to the dish, not to any single
+      appearance; only serving feedback carries a date.
+    </li>
+    <li>
+      <strong>Ratings and comments attach to dishes, not servings.</strong> A rating is
+      associated with a user and a dish, and persists rather than resetting each day. A user
+      may rate any given dish at most once, enforced by a uniqueness constraint on (user,
+      dish), and can update that rating later.
+    </li>
+    <li>
+      <strong>Rating format.</strong> We are still deciding between a five-star scale, a
+      like/dislike toggle, and three recommendation levels ("Don't recommend," "Recommend,"
+      "Strongly recommend"). Whichever we choose, the rating is a property of the (user,
+      dish) pair and carries no date of its own.
+    </li>
+    <li>
+      <strong>Serving feedback is recorded per visit.</strong> Day-to-day variation is
+      captured by a separate entity rather than by the rating. Each time a user eats a dish
+      they may record how that serving compared to usual (better than usual, as usual, or
+      worse than usual), and those records are attached to the user and the dish and carry a
+      date. A user may submit at most one such record per dish per day. We are still deciding
+      exactly how to implement this, including how a record is tied to one particular serving
+      and whether these three levels are the final set.
+    </li>
+    <li>
+      <strong>Meals can be rated as a whole.</strong> Separate from individual dish ratings,
+      a user may give an overall rating for a meal period at a dining hall, such as lunch at
+      North Dining Hall on a given date. We model this on the meal period rather than on any
+      single dish, and may also record how many users rated it.
+    </li>
+    <li>
+      <strong>Dish name normalization.</strong> Scraped names are not guaranteed unique or
+      consistently spelled across halls and dates. We assume a normalization step and an
+      alias table mapping raw scraped names onto canonical dish records.
+    </li>
+    <li>
+      <strong>Nutrition is one-to-one with a dish.</strong> Each canonical dish has exactly
+      one nutrition record; nutrition is not stored per serving.
+    </li>
+    <li>
+      <strong>Menu history is retained locally.</strong> We assume menus are persisted in our
+      own database as they are scraped, so that past dates remain browsable.
+    </li>
+    <li>
+      <strong>Users are authenticated.</strong> We assume each user has exactly one account
+      and one profile, and that a user must be signed in to rate, comment, or vote.
+    </li>
+    <li>
+      <strong>Some users are administrators.</strong> <em>Student</em> is modeled as a
+      supertype with two subtypes, <em>Regular User</em> and <em>Admin</em>. Admins carry
+      administrative privileges that regular users do not, which is what the <em>Admin</em>
+      entity's <em>admin_privileges</em> attribute records. We use an ISA hierarchy rather
+      than a single role attribute on <em>Student</em> because the two subtypes are
+      distinguished by attributes of their own.
+    </li>
+    <li>
+      <strong>The preference survey is optional.</strong> A user may have no survey response
+      at all. In that case the recommendation engine falls back to popularity and
+      collaborative signals rather than content-based ones. The survey is modeled as a set of
+      declared preferences plus seed dish ratings.
+    </li>
+    <li>
+      <strong>Comments are polymorphic but constrained.</strong> A comment attaches to either
+      a dish (dish-level discussion) or a meal period (overall meal discussion). We model this
+      as nullable foreign keys with a constraint enforcing that exactly one is set.
+    </li>
+    <li>
+      <strong>Comments are threaded.</strong> A comment may reference a parent comment,
+      forming a tree. Top-level comments have a null parent.
+    </li>
+    <li>
+      <strong>Media is referenced, not stored inline.</strong> Images and GIFs belong to a
+      comment. We assume binaries live on the server filesystem and the database stores only a
+      URL and metadata; GIFs sourced from Giphy are referenced by their remote URL.
+    </li>
+    <li>
+      <strong>Suggestions carry vote totals.</strong> A dish suggestion is a user-authored
+      proposal. Upvote and downvote totals are stored on the suggestion record itself; the
+      current design does not track which user cast which vote.
+    </li>
+    <li>
+      <strong>Dining halls are seeded, not user-created.</strong> The set of Notre Dame
+      dining locations is small and changes rarely, so dining hall records are inserted
+      administratively rather than created through the application.
+    </li>
+    <li>
+      <strong>The correlation matrix is derived data.</strong> The dish-by-dish correlation
+      table is a cache computed from ratings, not a source of truth. It can be dropped and
+      rebuilt from the ratings table at any time, which is what makes incremental updates safe.
+    </li>
+    <li>
+      <strong>Favorites drive notifications.</strong> A user may favorite a dish; the system
+      derives "your favorite is back" notifications by checking whether a favorited dish has a
+      menu appearance on an upcoming date, rather than storing separate notification records per
+      occurrence.
+    </li>
+  </ol>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    Forkcast &middot; CSE 30246 Database Concepts &middot; University of Notre Dame &middot;
+    Stage 2 project details.
+  </p>
+</footer>
+
+</div>
+</body>
+</html>
