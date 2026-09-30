@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Forkcast &middot; Development Plan</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f5f7fa;
+    --surface-2: #eceff3;
+    --text: #171b21;
+    --muted: #5a6472;
+    --border: #dfe4ea;
+    --accent: #0c2340;
+    --gold: #b8860b;
+    --link: #0f4c81;
+    --shadow: 0 1px 2px rgba(12, 35, 64, .06), 0 8px 24px rgba(12, 35, 64, .05);
+    --radius: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f141b;
+      --surface: #161d26;
+      --surface-2: #1d2531;
+      --text: #e7edf4;
+      --muted: #9aa7b6;
+      --border: #2a3441;
+      --accent: #9dc0e6;
+      --gold: #e0b44a;
+      --link: #7cb3e8;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .3);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    padding: 0 1.25rem 5rem;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+
+  header {
+    padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .eyebrow {
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+    margin: 0 0 .5rem;
+    letter-spacing: -.02em;
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+    max-width: 62ch;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .meta li {
+    font-size: .82rem;
+    padding: .3rem .7rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ---------- Table of contents ---------- */
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  nav.toc h2 {
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .75rem;
+  }
+
+  nav.toc ol {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+  }
+
+  @media (max-width: 560px) { nav.toc ol { grid-template-columns: 1fr; } }
+
+  nav.toc li { margin: .15rem 0; }
+
+  /* ---------- Sections ---------- */
+
+  section { margin-bottom: 3.5rem; scroll-margin-top: 1.5rem; }
+
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    letter-spacing: -.01em;
+    color: var(--accent);
+    margin: 0 0 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--gold);
+    display: inline-block;
+  }
+
+  h3 {
+    font-size: 1.08rem;
+    margin: 2rem 0 .6rem;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: .95rem;
+    margin: 1.25rem 0 .4rem;
+    color: var(--muted);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+
+  p { margin: 0 0 1rem; }
+
+  a { color: var(--link); text-underline-offset: 2px; }
+
+  ul, ol { padding-left: 1.3rem; }
+
+  li { margin: .4rem 0; }
+
+  strong { font-weight: 650; }
+
+  /* ---------- Cards ---------- */
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.6rem;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow);
+  }
+
+  .card h3 {
+    margin-top: 0;
+    font-size: 1.15rem;
+    color: var(--accent);
+  }
+
+  .card .lede {
+    color: var(--muted);
+    font-size: .95rem;
+    margin-bottom: 1rem;
+  }
+
+  .card h4 { margin-top: 1.1rem; }
+
+  .card ul { margin-bottom: 0; }
+
+  /* ---------- Basic function list ---------- */
+
+  dl.functions { margin: 0; }
+
+  dl.functions dt {
+    font-weight: 650;
+    margin-top: 1.1rem;
+    color: var(--text);
+  }
+
+  dl.functions dd {
+    margin: .25rem 0 0;
+    color: var(--muted);
+  }
+
+  /* ---------- ER diagram callout ---------- */
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .95rem;
+    padding: .7rem 1.3rem;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    transition: opacity .15s ease;
+  }
+
+  .btn:hover { opacity: .85; }
+
+  /* ---------- Footer ---------- */
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: .85rem;
+  }
+
+  /* ---------- Schema code ---------- */
+
+  pre.sql {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.4rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    font: 13px/1.65 ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+    color: var(--text);
+    tab-size: 4;
+  }
+
+  code {
+    font: .88em ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: .05em .35em;
+  }
+
+  pre.sql code {
+    font: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+
+  /* ---------- Tables ---------- */
+
+  .table-scroll { overflow-x: auto; margin: 1.5rem 0; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: .88rem;
+    min-width: 540px;
+  }
+
+  caption {
+    caption-side: top;
+    text-align: left;
+    color: var(--muted);
+    font-size: .82rem;
+    padding-bottom: .6rem;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: .55rem .75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    background: var(--surface-2);
+    font-weight: 650;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  tbody tr:nth-child(even) td { background: var(--surface); }
+
+  td.rel { font-weight: 650; white-space: nowrap; }
+
+  /* ---------- Timeline ---------- */
+
+  ol.timeline {
+    list-style: none;
+    padding: 0;
+    margin: 1.75rem 0 0;
+  }
+
+  ol.timeline > li {
+    position: relative;
+    padding: 0 0 1.75rem 1.7rem;
+    margin: 0;
+    border-left: 2px solid var(--border);
+  }
+
+  ol.timeline > li:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+
+  ol.timeline > li::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: .4rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--gold);
+  }
+
+  ol.timeline > li.milestone::before { background: var(--gold); }
+
+  .when {
+    display: block;
+    font-size: .78rem;
+    font-weight: 650;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .15rem;
+  }
+
+  .what { font-weight: 650; }
+
+  ol.timeline p {
+    margin: .3rem 0 0;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+
+  ol.timeline ul {
+    margin: .6rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+
+  ol.timeline ul li { margin: .3rem 0; }
+
+  /* ---------- Status list ---------- */
+
+  ul.check { list-style: none; padding-left: 0; }
+
+  ul.check li {
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  ul.check li::before {
+    content: "\2610";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 1.05em;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">CSE 30246 &middot; Database Concepts &middot; Stage 2 Development Plan</p>
+  <h1>Forkcast</h1>
+  <p class="tagline">
+    A dish-level rating, review, and recommendation platform for Notre Dame dining halls.
+  </p>
+  <ul class="meta">
+    <li>Team: forkcast</li>
+    <li>Course: CSE 30246</li>
+    <li>Stage 2: Development Plan</li>
+    <li>Due: 11:59pm, Wednesday, September 30, 2026</li>
+  </ul>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#schema">Relational Schema of the Database</a></li>
+    <li><a href="#platforms">Databases &amp; Software Platforms</a></li>
+    <li><a href="#data">Data Sources</a></li>
+    <li><a href="#labor">Labor Division</a></li>
+    <li><a href="#timeline">Project Timeline &amp; Milestones</a></li>
+  </ol>
+  <p style="margin:.9rem 0 0;font-size:.85rem;color:var(--muted)">
+    See also: <a href="project.html">Project description</a> &middot;
+    <a href="erdiagram.svg">ER diagram</a>
+  </p>
+</nav>
+
+<main>
+
+<!-- ============================================================ -->
+<section id="schema">
+  <h2>1. Relational Schema of the Database</h2>
+
+  <p>
+    Forkcast is built on twelve relations. The schema below is the working DDL for the
+    project, written for PostgreSQL. Interfaces and <code>SERIAL</code> surrogate keys are
+    used throughout so that no natural key has to be propagated as a foreign key.
+  </p>
+
+<pre class="sql"><code>-- Core user table. ISA collapsed into one table with a role flag
+-- instead of three separate tables.
+CREATE TABLE Student (
+    student_id   SERIAL PRIMARY KEY,
+    name         VARCHAR(100) NOT NULL,
+    email        VARCHAR(100) NOT NULL UNIQUE,
+    year         VARCHAR(20),
+    major        VARCHAR(100),
+    role         VARCHAR(20) NOT NULL DEFAULT 'regular', -- 'regular' or 'admin'
+    admin_privileges       VARCHAR(100),   -- set only when role = 'admin'
+    profile_visibility     VARCHAR(20) DEFAULT 'public',
+    notification_settings  JSONB
+);
+
+CREATE TABLE DiningHall (
+    dining_hall_id SERIAL PRIMARY KEY,
+    name           VARCHAR(100) NOT NULL UNIQUE,
+    location       VARCHAR(200),
+    hours          VARCHAR(200)
+);
+
+CREATE TABLE Menu (
+    menu_id        SERIAL PRIMARY KEY,
+    dining_hall_id INT NOT NULL REFERENCES DiningHall(dining_hall_id),
+    date           DATE NOT NULL,
+    meal_period    VARCHAR(20) NOT NULL,
+    description    TEXT,
+    UNIQUE (dining_hall_id, date, meal_period)
+);
+
+CREATE TABLE Dish (
+    dish_id     SERIAL PRIMARY KEY,
+    name        VARCHAR(150) NOT NULL,
+    category    VARCHAR(50),
+    ingredients TEXT[],
+    allergens   TEXT[]
+);
+
+CREATE TABLE MenuDish (
+    menu_id INT REFERENCES Menu(menu_id),
+    dish_id INT REFERENCES Dish(dish_id),
+    PRIMARY KEY (menu_id, dish_id)
+);
+
+CREATE TABLE Rating (
+    rating_id    SERIAL PRIMARY KEY,
+    student_id   INT NOT NULL REFERENCES Student(student_id),
+    dish_id      INT NOT NULL REFERENCES Dish(dish_id),
+    menu_id      INT REFERENCES Menu(menu_id),  -- ties a rating to a specific day/serving
+    score        NUMERIC(3,1) NOT NULL,
+    is_synthetic BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at   TIMESTAMP NOT NULL DEFAULT now(),
+    UNIQUE (student_id, dish_id, menu_id)
+);
+
+-- With media/Giphy attachments, this is the comments advanced function
+CREATE TABLE Comment (
+    comment_id        SERIAL PRIMARY KEY,
+    student_id        INT NOT NULL REFERENCES Student(student_id),
+    dish_id           INT REFERENCES Dish(dish_id),
+    content            TEXT NOT NULL,
+    media_urls         TEXT[],   -- image and Giphy links attached to this comment
+    created_at          TIMESTAMP NOT NULL DEFAULT now()
+);
+
+
+CREATE TABLE DishSuggestion (
+    suggestion_id SERIAL PRIMARY KEY,
+    student_id    INT NOT NULL REFERENCES Student(student_id),
+    content       TEXT NOT NULL,
+    upvotes       INT NOT NULL DEFAULT 0,
+    downvotes     INT NOT NULL DEFAULT 0,
+    created_at    TIMESTAMP NOT NULL DEFAULT now()
+);
+
+CREATE TABLE Survey (
+    survey_id            SERIAL PRIMARY KEY,
+    student_id           INT NOT NULL UNIQUE REFERENCES Student(student_id),
+    date_taken           DATE NOT NULL,
+    dietary_restrictions TEXT[],
+    favorite_cuisines    TEXT[],
+    other_preferences    TEXT
+);
+
+-- Recommendation advanced function, this pair is the actual engine.
+-- Both are caches recomputed periodically from Rating, not hand maintained.
+CREATE TABLE DishPreference (
+    student_id       INT REFERENCES Student(student_id),
+    dish_id          INT REFERENCES Dish(dish_id),
+    preference_score NUMERIC(5,3) NOT NULL,  -- time-weighted R_u,X
+    last_updated     TIMESTAMP NOT NULL DEFAULT now(),
+    PRIMARY KEY (student_id, dish_id)
+);
+
+CREATE TABLE DishCorrelation (
+    dish_id_1          INT REFERENCES Dish(dish_id),
+    dish_id_2          INT REFERENCES Dish(dish_id),
+    correlation        NUMERIC(5,4) NOT NULL,   -- rho_XY
+    shared_rater_count INT NOT NULL,            -- n_XY
+    last_updated       TIMESTAMP NOT NULL DEFAULT now(),
+    PRIMARY KEY (dish_id_1, dish_id_2),
+    CHECK (dish_id_1 &lt; dish_id_2)  -- store each unordered pair once
+);</code></pre>
+
+  <h3>Keys and functional dependencies</h3>
+
+  <p>
+    Every relation below is in BCNF &mdash; every determinant is a candidate key, and where a
+    <code>UNIQUE</code> constraint is declared the surrogate and natural keys determine each
+    other.
+  </p>
+
+  <div class="table-scroll">
+    <table>
+      <caption>
+        Functional dependencies derived from the keys and constraints declared above.
+      </caption>
+      <thead>
+        <tr>
+          <th>Relation</th>
+          <th>Candidate keys</th>
+          <th>Functional dependencies</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rel">Student</td>
+          <td><code>student_id</code><br /><code>email</code></td>
+          <td>
+            <code>student_id &rarr; name, email, year, major, role, admin_privileges,
+            profile_visibility, notification_settings</code><br />
+            <code>email &rarr; student_id</code> (and therefore all remaining attributes,
+            transitively)
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">DiningHall</td>
+          <td><code>dining_hall_id</code><br /><code>name</code></td>
+          <td>
+            <code>dining_hall_id &rarr; name, location, hours</code><br />
+            <code>name &rarr; dining_hall_id, location, hours</code>
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">Menu</td>
+          <td><code>menu_id</code><br />
+            <code>(dining_hall_id, date, meal_period)</code></td>
+          <td>
+            <code>menu_id &rarr; dining_hall_id, date, meal_period, description</code><br />
+            <code>(dining_hall_id, date, meal_period) &rarr; menu_id, description</code>
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">Dish</td>
+          <td><code>dish_id</code></td>
+          <td><code>dish_id &rarr; name, category, ingredients, allergens</code></td>
+        </tr>
+        <tr>
+          <td class="rel">MenuDish</td>
+          <td><code>(menu_id, dish_id)</code></td>
+          <td>
+            No non-trivial dependencies. Both attributes are prime and the relation carries
+            no descriptive attributes of its own.
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">Rating</td>
+          <td><code>rating_id</code><br />
+            <code>(student_id, dish_id, menu_id)</code></td>
+          <td>
+            <code>rating_id &rarr; student_id, dish_id, menu_id, score, is_synthetic,
+            created_at</code><br />
+            <code>(student_id, dish_id, menu_id) &rarr; rating_id, score, is_synthetic,
+            created_at</code>
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">Comment</td>
+          <td><code>comment_id</code></td>
+          <td>
+            <code>comment_id &rarr; student_id, dish_id, content, media_urls, created_at</code>
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">DishSuggestion</td>
+          <td><code>suggestion_id</code></td>
+          <td>
+            <code>suggestion_id &rarr; student_id, content, upvotes, downvotes, created_at</code>
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">Survey</td>
+          <td><code>survey_id</code><br /><code>student_id</code></td>
+          <td>
+            <code>survey_id &rarr; student_id, date_taken, dietary_restrictions,
+            favorite_cuisines, other_preferences</code><br />
+            <code>student_id &rarr; survey_id, date_taken, dietary_restrictions,
+            favorite_cuisines, other_preferences</code> &mdash; the survey is optional but at
+            most one per student.
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">DishPreference</td>
+          <td><code>(student_id, dish_id)</code></td>
+          <td>
+            <code>(student_id, dish_id) &rarr; preference_score, last_updated</code>
+          </td>
+        </tr>
+        <tr>
+          <td class="rel">DishCorrelation</td>
+          <td><code>(dish_id_1, dish_id_2)</code></td>
+          <td>
+            <code>(dish_id_1, dish_id_2) &rarr; correlation, shared_rater_count,
+            last_updated</code> &mdash; a symmetric relation, so only the pair with
+            <code>dish_id_1 &lt; dish_id_2</code> is stored; the reverse pair is implied.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Referential (inclusion) dependencies</h4>
+
+  <p>
+    The foreign keys also impose inclusion dependencies of the form
+    <code>R.A &sube; S.B</code>:
+    <code>Menu.dining_hall_id &sube; DiningHall.dining_hall_id</code>;
+    <code>MenuDish.{menu_id, dish_id} &sube; Menu.menu_id &times; Dish.dish_id</code>;
+    <code>Rating.{student_id, dish_id, menu_id} &sube; Student.student_id &times; Dish.dish_id
+    &times; Menu.menu_id</code>;
+    <code>Comment.{student_id, dish_id} &sube; Student.student_id &times; Dish.dish_id</code>;
+    <code>Survey.student_id &sube; Student.student_id</code>;
+    <code>DishSuggestion.student_id &sube; Student.student_id</code>;
+    <code>DishPreference.{student_id, dish_id} &sube; Student.student_id &times;
+    Dish.dish_id</code>; and
+    <code>DishCorrelation.{dish_id_1, dish_id_2} &sube; Dish.dish_id &times; Dish.dish_id</code>.
+  </p>
+</section>
+
+<!-- ============================================================ -->
+<section id="platforms">
+  <h2>2. Databases &amp; Software Platforms</h2>
+
+  <div class="card">
+    <h4>Database</h4>
+    <p>PostgreSQL</p>
+
+    <h4>Software platforms/languages</h4>
+    <dl class="functions">
+      <dt>Backend</dt>
+      <dd>Flask, Python</dd>
+
+      <dt>Frontend</dt>
+      <dd>Expo (React), TypeScript/Javascript, CSS/HTML</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="data">
+  <h2>3. Data Sources</h2>
+
+  <p>
+    We will get the menu data from
+    <a href="https://dining.nd.edu">https://dining.nd.edu</a> to see previous offerings at
+    the dining hall. This data can be obtained by scraping the site, and it gives us:
+  </p>
+
+  <ul>
+    <li>Dish name</li>
+    <li>Dining location</li>
+    <li>Meal periods</li>
+    <li>Dates</li>
+  </ul>
+
+  <p>
+    Ratings, surveys, and comments will be provided by students.
+  </p>
+</section>
+
+<!-- ============================================================ -->
+<section id="labor">
+  <h2>4. Labor Division</h2>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Feature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rel">Dao Wei</td>
+          <td>Ratings</td>
+        </tr>
+        <tr>
+          <td class="rel">Derick</td>
+          <td>Scraping dining hall data</td>
+        </tr>
+        <tr>
+          <td class="rel">Louis</td>
+          <td>Student sign up</td>
+        </tr>
+        <tr>
+          <td class="rel">Michael</td>
+          <td>Survey</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    We will work on both the front and back end for each feature. Advanced functions we will
+    work on together.
+  </p>
+
+</section>
+
+<!-- ============================================================ -->
+<section id="timeline">
+  <h2>5. Project Timeline &amp; Milestones</h2>
+
+  <ol class="timeline">
+    <li>
+      <span class="when">Oct. 1&ndash;7</span>
+      <span class="what">Database Setup &amp; Data Collection</span>
+      <p>
+        Create all database tables, constraints, keys, and relationships. Develop scripts for
+        collecting/importing real-world data.
+      </p>
+    </li>
+    <li>
+      <span class="when">Oct. 8&ndash;14</span>
+      <span class="what">Data Population &amp; Backend Integration</span>
+      <p>
+        Populate the database with real data and connect the web application to the database.
+        Target 10,000+ data items across at least 5 relations.
+      </p>
+    </li>
+    <li>
+      <span class="when">Oct. 15&ndash;21</span>
+      <span class="what">Basic Database Functions</span>
+      <p>
+        Implement insertion, searching/querying, updating, and deletion. Test SQL queries and
+        database interactions.
+      </p>
+    </li>
+    <li>
+      <span class="when">Oct. 22&ndash;28</span>
+      <span class="what">Initial Frontend &amp; Integration</span>
+      <p>
+        Build the main user interface and connect frontend actions to the database-backed
+        functionality. Begin implementing the two advanced functions.
+      </p>
+    </li>
+    <li>
+      <span class="when">Oct. 29&ndash;Nov. 3</span>
+      <span class="what">Initial Demo Preparation</span>
+      <p>
+        Test the complete basic workflow, fix bugs, verify the real dataset, and prepare the
+        15-minute demonstration. Finalize plans/designs for both advanced functions.
+      </p>
+    </li>
+    <li class="milestone">
+      <span class="when">Nov 4th</span>
+      <span class="what">Initial Demo</span>
+      <p>Demo its application in its initial working status.</p>
+      <ul>
+        <li>
+          Real data in the database &mdash; 10,000 or more items of data across 5 or more
+          different relations.
+        </li>
+        <li>Show how to insert/update/delete records to the database.</li>
+        <li>
+          Show how to search the database and list or print returned results. One of the
+          queries must involve join of multiple tables.
+        </li>
+        <li>
+          Talk about your plan for the next stage of the project, including what advanced
+          functions you plan to support.
+        </li>
+      </ul>
+    </li>
+    <li>
+      <span class="when">Nov. 5&ndash;15</span>
+      <span class="what">Advanced Function 1</span>
+      <p>Implement, integrate, and test the first advanced function.</p>
+    </li>
+    <li>
+      <span class="when">Nov. 16&ndash;25</span>
+      <span class="what">Advanced Function 2</span>
+      <p>Implement, integrate, and test the second advanced function.</p>
+    </li>
+    <li>
+      <span class="when">Nov. 26&ndash;Dec. 2</span>
+      <span class="what">Final Integration &amp; UI</span>
+      <p>
+        Integrate both advanced functions, improve UI/UX, add interesting database queries
+        including a multi-table join, and perform system-wide testing.
+      </p>
+    </li>
+    <li>
+      <span class="when">Dec. 3&ndash;6</span>
+      <span class="what">Final Testing &amp; Documentation</span>
+      <p>
+        Fix remaining bugs, verify all requirements, prepare the final report, and record the
+        2-minute demo video.
+      </p>
+    </li>
+    <li class="milestone">
+      <span class="when">Dec. 7&ndash;9</span>
+      <span class="what">Final Demonstration</span>
+      <p>
+        Present the 2-minute video demonstrating the completed system and its major features.
+      </p>
+    </li>
+  </ol>
+
+</section>
+
+</main>
+
+<footer>
+  <p>
+    Forkcast &middot; CSE 30246 Database Concepts &middot; University of Notre Dame &middot;
+    Stage 2 development plan. See also the <a href="project.html">project description</a>.
+  </p>
+</footer>
+
+</div>
+</body>
+</html>
