@@ -1,0 +1,14 @@
+{
+  "requested_start": "2026-08-16",
+  "requested_end": "2026-10-07",
+  "earliest_populated_date": "2026-08-30",
+  "latest_populated_date": "2026-10-07",
+  "distinct_food_ids": 1428,
+  "food_versions": 1502,
+  "menu_occurrences": 40057,
+  "csv_bytes": {
+    "coverage.csv": 52774,
+    "menu_occurrences.csv": 41262477,
+    "foods.csv": 7175002
+  }
+}
