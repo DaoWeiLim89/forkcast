@@ -1,14 +1,14 @@
 {
   "requested_start": "2026-08-16",
-  "requested_end": "2026-10-07",
+  "requested_end": "2026-10-28",
   "earliest_populated_date": "2026-08-30",
-  "latest_populated_date": "2026-10-07",
-  "distinct_food_ids": 1428,
-  "food_versions": 1502,
-  "menu_occurrences": 40057,
+  "latest_populated_date": "2026-10-28",
+  "distinct_food_ids": 1568,
+  "food_versions": 1766,
+  "menu_occurrences": 57199,
   "csv_bytes": {
-    "coverage.csv": 52774,
-    "menu_occurrences.csv": 41262477,
-    "foods.csv": 7175002
+    "coverage.csv": 73850,
+    "menu_occurrences.csv": 58932879,
+    "foods.csv": 8528919
   }
 }
