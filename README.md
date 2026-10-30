@@ -1,6 +1,6 @@
 # Forkcast
 
-Notre Dame dining menu archive and plans for a student dining review and recommendation app. The proposed stack is PostgreSQL, Flask/Python, and Expo/React. This checkout currently contains the project documents and the Nutrislice data collector; it does not yet contain a database migration, database importer, or application backend.
+Notre Dame dining menu archive and plans for a student dining review and recommendation app. The stack is PostgreSQL, Django/Python, and Expo/React. This checkout currently contains the project documents and the Nutrislice data collector; it does not yet contain a database migration, database importer, or application backend.
 
 - [Project proposal](project.html)
 - [Development plan and proposed SQL schema](devplan.html)
