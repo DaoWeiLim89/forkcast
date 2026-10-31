@@ -71,7 +71,7 @@ class Menu(models.Model):
 
 class MenuItem(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="items")
-    dish = models.ForeignKey("Dish", on_delete=models.PROJECT, related_name="menu_items")
+    dish = models.ForeignKey("Dish", on_delete=models.PROTECT, related_name="menu_items")
     
     menu_item_id = models.CharField(max_length=255)
     station_id = models.CharField(max_length=255, blank=True)
