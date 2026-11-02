@@ -8,8 +8,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-
-from .serializers import SignInSerializer, UserSerializer
+from django.db import IntegrityError, transaction
+from .serializers import SignInSerializer, UserSerializer, SignUpSerializer
 
 @csrf_protect
 @api_view(["POST"])
@@ -73,3 +73,26 @@ def csrf_token(request):
         "csrfToken": get_token(request),
     })
 
+@csrf_protect
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def sign_up(request):
+    serializer = SignUpSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    try:
+        with transaction.atomic():
+            user = serializer.save()
+    except IntegrityError:
+        return Response(
+            {"message": "An account with these details already exists."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    return Response(
+        {
+            "message": "Account created. You can now sign in.",
+            "user": UserSerializer(user).data,
+        },
+        status=status.HTTP_201_CREATED,
+    )
